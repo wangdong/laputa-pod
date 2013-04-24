@@ -14,3 +14,4 @@ clean:
 
 install: all
 	install -m 0755 spod /usr/local/bin
+	install -m 0755 script/spod-put-cosm-feed /usr/local/bin

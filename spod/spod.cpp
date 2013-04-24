@@ -30,7 +30,7 @@ void loop() {
 			float data[CONF_DATA_COUNT];
 			radio.read((char*)&data, CONF_DATA_SIZE);
 
-			printf("/%s?temp=%f&hum=%f", CONF_ADDR_POD0, data[CONF_DATA_TEMP], data[CONF_DATA_HUM]);
+			printf("%s,%f,%f,%f", CONF_ADDR_POD0, data[CONF_DATA_TEMP], data[CONF_DATA_HUM], data[CONF_DATA_DEW]);
 
 			break;
 		}
