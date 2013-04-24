@@ -11,7 +11,7 @@
 # use make all and mak install to install the library 
 # You can change the install directory by editing the LIBDIR line
 #
-PREFIX=/usr/local
+PREFIX=/usr
 
 # Library parameters
 # where to put the lib
