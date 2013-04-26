@@ -17,7 +17,7 @@
 #define LA_CONF_ADDR_POD7	"QC00N007"
 
 inline
-uint64_t la_conf_to_addr(char* addr) {
+uint64_t la_conf_to_addr(const char* addr) {
 	return *(uint64_t*)addr;
 }
 
