@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+data = %x{spod}.split(',')
+
+$stderr.puts data
+
+json = <<-EOF
+{
+  "version":"1.0.0",
+  "datastreams":[
+      {"id":"node",        "current_value":"#{                data[0].to_s}"},
+      {"id":"temperature", "current_value":"#{sprintf '%.2f', data[1]}"},
+      {"id":"humidity",    "current_value":"#{sprintf '%.2f', data[2]}"},
+      {"id":"dewpoint",    "current_value":"#{sprintf '%.2f', data[3]}"}
+  ]
+}
+EOF
+
+cmd = "curl --request PUT --data '#{json}' --header 'X-ApiKey: wbJGtq74L0Dl0DkdfgaioDOs6YiSAKxBUVlLMkxVc2xmWT0g' http://api.cosm.com/v2/feeds/127430"
+
+$stderr.puts %x{#{cmd}}
