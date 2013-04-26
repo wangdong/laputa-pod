@@ -2,7 +2,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <DHT11.h>
-#include <laputa-pod.h>
+#include <laputa.h>
 
 
 dht11 DHT11;
@@ -42,7 +42,10 @@ bool probeAndSendByDHT11() {
 		data[LA_CONF_DATA_HUM]  = (double)DHT11.humidity;
 		data[LA_CONF_DATA_DEW]  = (double)helper_dewPoint(DHT11.temperature, DHT11.humidity);
 
-		radio.write((byte*)data, LA_CONF_DATA_SIZE);
+		LaProto::beginWrite()
+			.withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
+			.sendFrom(LA_CONF_ADDR_POD0)
+			.write(radio);
 
 		Serial.print("TEMP: ");
 		Serial.println(data[LA_CONF_DATA_TEMP]);
