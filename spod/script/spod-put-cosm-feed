@@ -7,7 +7,6 @@ json = <<-EOF
 {
   "version":"1.0.0",
   "datastreams":[
-      {"id":"node",        "current_value":"#{                data[0].to_s}"},
       {"id":"temperature", "current_value":"#{sprintf '%.2f', data[1]}"},
       {"id":"humidity",    "current_value":"#{sprintf '%.2f', data[2]}"},
       {"id":"dewpoint",    "current_value":"#{sprintf '%.2f', data[3]}"}

@@ -6,7 +6,7 @@ CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
 all: spod
 
 spod: spod.cpp
-	g++ -Wall -lrf24-bcm -I./include ${CCFLAGS} -o spod $^
+	g++ -Wall -lrf24-bcm -I../include ${CCFLAGS} -o spod $^
 
 # clear build files
 clean:
