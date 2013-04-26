@@ -2,22 +2,22 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <DHT11.h>
-#include <qNode.h>
+#include <laputa-pod.h>
 
 
 dht11 DHT11;
-RF24 radio(CONF_PIN_CE, CONF_PIN_CSN);
+RF24 radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
 
 void setup(void)
 {
-	Serial.begin(CONF_BAUD);
+	Serial.begin(LA_CONF_BAUD);
 
 	radio.begin();
 	radio.setDataRate(RF24_2MBPS);
 	radio.setPALevel(RF24_PA_MAX);
-	radio.setPayloadSize(CONF_PAYLOAD);
-	radio.setChannel(CONF_CHANNEL);
-	radio.openWritingPipe(CONF_ADDR_CENTER);
+	radio.setPayloadSize(LA_CONF_PAYLOAD);
+	radio.setChannel(LA_CONF_CHANNEL);
+	radio.openWritingPipe(la_conf_to_addr(LA_CONF_ADDR_LAPUTA));
 
 	radio.startListening();
 
@@ -31,21 +31,21 @@ void loop(void) {
 	radio.powerUp();
 	probeAndSendByDHT11();
 	radio.powerDown();
-	delay(CONF_PROBE_DELAY);
+	delay(LA_CONF_PROBE_DELAY);
 }
 
 
 bool probeAndSendByDHT11() {
-	if (DHT11.read(CONF_PIN_DHT11) == DHTLIB_OK) {
-		float data[CONF_DATA_COUNT];
-		data[CONF_DATA_TEMP] = (double)DHT11.temperature;
-		data[CONF_DATA_HUM]  = (double)DHT11.humidity;
-		data[CONF_DATA_DEW]  = (double)helper_dewPointFast(DHT11.temperature, DHT11.humidity);
+	if (DHT11.read(LA_CONF_PIN_DHT11) == DHTLIB_OK) {
+		float data[LA_CONF_DATA_COUNT];
+		data[LA_CONF_DATA_TEMP] = (double)DHT11.temperature;
+		data[LA_CONF_DATA_HUM]  = (double)DHT11.humidity;
+		data[LA_CONF_DATA_DEW]  = (double)helper_dewPoint(DHT11.temperature, DHT11.humidity);
 
-		radio.write((byte*)data, CONF_DATA_SIZE);
+		radio.write((byte*)data, LA_CONF_DATA_SIZE);
 
 		Serial.print("TEMP: ");
-		Serial.println(data[CONF_DATA_TEMP]);
+		Serial.println(data[LA_CONF_DATA_TEMP]);
 
 		return true;
 	}
