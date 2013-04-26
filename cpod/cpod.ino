@@ -42,10 +42,10 @@ bool probeAndSendByDHT11() {
 		data[LA_CONF_DATA_HUM]  = (double)DHT11.humidity;
 		data[LA_CONF_DATA_DEW]  = (double)helper_dewPoint(DHT11.temperature, DHT11.humidity);
 
-		LaProto::beginWrite()
+		LaProto::datagram()
 			.withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
 			.sendFrom(LA_CONF_ADDR_POD0)
-			.write(radio);
+		.write(radio);
 
 		Serial.print("TEMP: ");
 		Serial.println(data[LA_CONF_DATA_TEMP]);
