@@ -1,9 +1,9 @@
 #include <unistd.h>
 #include <librf24-bcm/RF24.h>
-#include <laputa-pod.h>
+#include <laputa.h>
 
-#define CONF_PROBE_TIMEOUT   (5 * 60) /* secs */
-#define CONF_PROBE_CYCLE      1       /* secs */
+#define LA_CONF_PROBE_TIMEOUT   (5 * 60) /* secs */
+#define LA_CONF_PROBE_CYCLE      1       /* secs */
 
 
 RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
@@ -14,9 +14,9 @@ void setup() {
 	radio.begin();
 	radio.setDataRate(RF24_2MBPS);
 	radio.setPALevel(RF24_PA_MAX);
-	radio.setPayloadSize(CONF_PAYLOAD);
-	radio.setChannel(CONF_CHANNEL);
-	radio.openReadingPipe(0, CONF_ADDR_CENTER);
+	radio.setPayloadSize(LA_CONF_PAYLOAD);
+	radio.setChannel(LA_CONF_CHANNEL);
+	radio.openReadingPipe(0, la_conf_to_addr(LA_CONF_ADDR_LAPUTA));
 
 	radio.startListening();
 }
@@ -24,19 +24,34 @@ void setup() {
 inline 
 void loop() {
 	int time = 0;
-	while (time < CONF_PROBE_TIMEOUT) {
+	while (time < LA_CONF_PROBE_TIMEOUT) {
 
 		if (radio.available()) {
-			float data[CONF_DATA_COUNT];
-			radio.read((char*)&data, CONF_DATA_SIZE);
 
-			printf("%s,%f,%f,%f", CONF_ADDR_POD0, data[CONF_DATA_TEMP], data[CONF_DATA_HUM], data[CONF_DATA_DEW]);
+			LaProto::datagram().read(radio);
+
+
+			float data[LA_CONF_DATA_COUNT];
+			const LaDATAGRAM& body = LaProto::datagram().body;
+
+			printf("%llu", body.sender); 
+			puts("GO");
+			puts(la_addr_to_conf(body.sender)); 
+			puts("GO");
+
+			memcpy((char*)&data, body.cont, body.len);
+
+			printf("%s,%f,%f,%f", 
+				la_addr_to_conf(body.sender), 
+				data[LA_CONF_DATA_TEMP], 
+				data[LA_CONF_DATA_HUM], 
+				data[LA_CONF_DATA_DEW]);
 
 			break;
 		}
 		
-		time += CONF_PROBE_CYCLE;
-		sleep(CONF_PROBE_CYCLE);
+		time += LA_CONF_PROBE_CYCLE;
+		sleep(LA_CONF_PROBE_CYCLE);
 		fputc('.', stderr);
 	}
 }

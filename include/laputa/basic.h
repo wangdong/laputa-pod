@@ -5,6 +5,8 @@
 //
 // Network
 //
+#define LA_CONF_ADDR_LEN    sizeof(uint64_t)
+
 #define LA_CONF_ADDR_LAPUTA	"QS00N000"
 
 #define LA_CONF_ADDR_POD0	"QC00N000"
@@ -21,6 +23,13 @@ uint64_t la_conf_to_addr(const char* addr) {
 	return *(uint64_t*)addr;
 }
 
+inline
+const char* la_addr_to_conf(uint64_t addr) {
+	static char conf[LA_CONF_ADDR_LEN + 1];
+	memcpy(conf, &addr, LA_CONF_ADDR_LEN);
+	conf[LA_CONF_ADDR_LEN] = 0;
+	return conf;
+}
 
 //
 // AC Data Pack
