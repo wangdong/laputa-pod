@@ -30,15 +30,9 @@ void loop() {
 
 			LaProto::datagram().read(radio);
 
-
-			float data[LA_CONF_DATA_COUNT];
 			const LaDATAGRAM& body = LaProto::datagram().body;
 
-			printf("%llu", body.sender); 
-			puts("GO");
-			puts(la_addr_to_conf(body.sender)); 
-			puts("GO");
-
+			float data[LA_CONF_DATA_COUNT];
 			memcpy((char*)&data, body.cont, body.len);
 
 			printf("%s,%f,%f,%f", 
