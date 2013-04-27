@@ -1,19 +1,29 @@
 #!/usr/bin/env ruby
 data = %x{spod}.split(',')
 
-$stderr.puts data
+if not data.empty? then
+	$stderr.puts data
 
-json = <<-EOF
-{
-  "version":"1.0.0",
-  "datastreams":[
-      {"id":"temperature", "current_value":"#{sprintf '%.2f', data[1]}"},
-      {"id":"humidity",    "current_value":"#{sprintf '%.2f', data[2]}"},
-      {"id":"dewpoint",    "current_value":"#{sprintf '%.2f', data[3]}"}
-  ]
-}
-EOF
+	apiKey   = 'n5MfoFKWWH-UmIh04QgUQA8FKAqSAKxSbHo4dnZkT2NVUT0g'
+	feedsmap = { 
+		'QC00N000' => 127430, 
+		'QC00N001' => 127822, 
+	} 
 
-cmd = "curl --request PUT --data '#{json}' --header 'X-ApiKey: wbJGtq74L0Dl0DkdfgaioDOs6YiSAKxBUVlLMkxVc2xmWT0g' http://api.cosm.com/v2/feeds/127430"
+	json = <<-EOF
+	{
+	  "version":"1.0.0",
+	  "datastreams":[
+	      {"id":"temperature", "current_value":"#{sprintf '%.2f', data[1]}"},
+	      {"id":"humidity",    "current_value":"#{sprintf '%.2f', data[2]}"},
+	      {"id":"dewpoint",    "current_value":"#{sprintf '%.2f', data[3]}"}
+	  ]
+	}
+	EOF
 
-$stderr.puts %x{#{cmd}}
+	cmd = "curl --request PUT --data '#{json}' --header 'X-ApiKey: #{apiKey}' http://api.cosm.com/v2/feeds/#{feedsmap[data[0]]}"
+
+	$stderr.puts cmd
+	$stderr.puts %x{#{cmd}}
+
+end
