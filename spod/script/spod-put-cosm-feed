@@ -8,6 +8,7 @@ if not data.empty? then
 	feedsmap = { 
 		'QC00N000' => 127430, 
 		'QC00N001' => 127822, 
+                'QC00N002' => 128076,
 	} 
 
 	json = <<-EOF
