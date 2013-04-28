@@ -14,3 +14,7 @@
 
 # Exe
 spod
+
+# Eagle
+*.pro
+*.b#*

@@ -44,7 +44,7 @@ bool probeAndSendByDHT11() {
 
 		LaProto::datagram()
 			.withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
-			.sendFrom(LA_CONF_ADDR_POD0)
+			.sendFrom(LA_CONF_ADDR_POD1)
 		.write(radio);
 
 		Serial.print("TEMP: ");
