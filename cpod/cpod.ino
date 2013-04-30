@@ -2,11 +2,12 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <DHT11.h>
+#include <LowPower.h>
 #include <laputa.h>
-
 
 dht11 DHT11;
 RF24 radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
+unsigned char tick = 0;
 
 void setup(void)
 {
@@ -20,18 +21,15 @@ void setup(void)
 	radio.openWritingPipe(la_conf_to_addr(LA_CONF_ADDR_LAPUTA));
 
 	radio.startListening();
-
 	printf_begin();
 	radio.printDetails();
 }
 
 
-
 void loop(void) {
-	radio.powerUp();
-	probeAndSendByDHT11();
-	radio.powerDown();
-	delay(LA_CONF_PROBE_DELAY);
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    if ( (tick++ % (LA_CONF_PROBE_DELAY/8)) == 0 )
+	 	probeAndSendByDHT11();
 }
 
 
@@ -42,13 +40,12 @@ bool probeAndSendByDHT11() {
 		data[LA_CONF_DATA_HUM]  = (double)DHT11.humidity;
 		data[LA_CONF_DATA_DEW]  = (double)helper_dewPoint(DHT11.temperature, DHT11.humidity);
 
+		radio.powerUp();
 		LaProto::datagram()
 			.withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
 			.sendFrom(LA_CONF_ADDR_POD2)
 		.write(radio);
-
-		Serial.print("TEMP: ");
-		Serial.println(data[LA_CONF_DATA_TEMP]);
+		radio.powerDown();
 
 		return true;
 	}

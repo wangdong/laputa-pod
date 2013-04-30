@@ -39,7 +39,7 @@ const char* la_addr_to_conf(uint64_t addr) {
 #define LA_CONF_DATA_TEMP	0
 #define LA_CONF_DATA_HUM	1
 #define LA_CONF_DATA_DEW	2
-#define LA_CONF_PROBE_DELAY	5000
+#define LA_CONF_PROBE_DELAY	32 /*secs*/
 
 
 //
@@ -59,9 +59,6 @@ const char* la_addr_to_conf(uint64_t addr) {
 
 //
 // Serial
-//
-// AC Data Pack
-//
 //
 #define LA_CONF_BAUD    		9600
 
