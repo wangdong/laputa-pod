@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.5" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -72,7 +72,7 @@
 <layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="100" name="Muster" color="7" fill="1" visible="no" active="no"/>
-<layer number="101" name="Patch_Top" color="12" fill="4" visible="no" active="yes"/>
+<layer number="101" name="Patch_Top" color="12" fill="4" visible="yes" active="yes"/>
 <layer number="102" name="Vscore" color="7" fill="1" visible="no" active="yes"/>
 <layer number="103" name="tMap" color="7" fill="1" visible="no" active="yes"/>
 <layer number="104" name="Name" color="16" fill="1" visible="no" active="yes"/>
@@ -3291,15 +3291,17 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <sheets>
 <sheet>
 <plain>
-<text x="165.1" y="106.68" size="1.778" layer="91">Vin (MAX) = 6V</text>
+<text x="165.1" y="109.22" size="1.778" layer="91">Vin (MAX) = 6V</text>
 <text x="165.1" y="104.14" size="1.778" layer="91">Iout (MAX) = 250mA</text>
 <text x="198.12" y="132.08" size="1.778" layer="91">Voltage Regulation</text>
 <text x="198.12" y="132.08" size="1.778" layer="91">Voltage Regulation</text>
 <text x="195.58" y="170.18" size="1.778" layer="91">Air Condition Sensor</text>
 <text x="203.2" y="93.98" size="1.778" layer="91">Power Supply</text>
 <text x="205.74" y="53.34" size="1.778" layer="91">Radio</text>
-<text x="63.5" y="170.18" size="1.778" layer="91">Arduino Pro Mini (3.3V 8MHz)</text>
+<text x="63.5" y="170.18" size="1.778" layer="91">Arduino Pro Mini (ATMEGA328P 3.3V 8MHz)</text>
 <text x="162.56" y="12.7" size="1.778" layer="91">Battery-powered Wireless AC Sensor</text>
+<text x="165.1" y="63.5" size="1.778" layer="91" font="vector">Vraw (3 AA LR6 Batteries) = 4.5V</text>
+<text x="165.1" y="106.68" size="1.778" layer="91">Vout = 3.3V</text>
 </plain>
 <instances>
 <instance part="FRAME1" gate="G$1" x="0" y="0"/>
@@ -3307,12 +3309,12 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <instance part="MCP1700T-3302-TO" gate="G$1" x="187.96" y="119.38"/>
 <instance part="C1" gate="G$1" x="215.9" y="119.38"/>
 <instance part="C2" gate="G$1" x="226.06" y="119.38"/>
-<instance part="ARDUINO1" gate="G$1" x="33.02" y="129.54"/>
-<instance part="ARDUINO2" gate="G$1" x="33.02" y="86.36"/>
+<instance part="ARDUINO1" gate="G$1" x="58.42" y="124.46"/>
+<instance part="ARDUINO2" gate="G$1" x="58.42" y="81.28"/>
 <instance part="RAW" gate="G$1" x="187.96" y="78.74"/>
 <instance part="NRF24L01+" gate="G$1" x="205.74" y="40.64"/>
-<instance part="P+1" gate="VCC" x="60.96" y="154.94"/>
-<instance part="GND2" gate="1" x="58.42" y="66.04"/>
+<instance part="P+1" gate="VCC" x="83.82" y="149.86"/>
+<instance part="GND2" gate="1" x="83.82" y="60.96"/>
 <instance part="P+2" gate="VCC" x="205.74" y="167.64"/>
 <instance part="R3" gate="G$1" x="228.6" y="160.02"/>
 <instance part="R4" gate="G$1" x="228.6" y="152.4"/>
@@ -3324,7 +3326,7 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <instance part="P+5" gate="VCC" x="241.3" y="167.64"/>
 <instance part="GND6" gate="1" x="208.28" y="144.78"/>
 <instance part="GND7" gate="1" x="205.74" y="68.58"/>
-<instance part="I2C" gate="G$1" x="35.56" y="40.64"/>
+<instance part="I2C" gate="G$1" x="60.96" y="35.56"/>
 <instance part="SUPPLY" gate="G$1" x="228.6" y="76.2"/>
 <instance part="P+6" gate="VCC" x="218.44" y="88.9"/>
 <instance part="GND8" gate="1" x="238.76" y="66.04"/>
@@ -3342,8 +3344,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </segment>
 <segment>
 <pinref part="I2C" gate="G$1" pin="2"/>
-<wire x1="43.18" y1="43.18" x2="50.8" y2="43.18" width="0.1524" layer="91"/>
-<label x="45.72" y="43.18" size="1.778" layer="95"/>
+<wire x1="68.58" y1="38.1" x2="76.2" y2="38.1" width="0.1524" layer="91"/>
+<label x="71.12" y="38.1" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R4" gate="G$1" pin="1"/>
@@ -3360,9 +3362,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </segment>
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="9"/>
-<wire x1="58.42" y1="91.44" x2="43.18" y2="91.44" width="0.1524" layer="91"/>
-<label x="45.72" y="91.44" size="1.778" layer="95"/>
-<wire x1="58.42" y1="91.44" x2="58.42" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="86.36" x2="68.58" y2="86.36" width="0.1524" layer="91"/>
+<label x="71.12" y="86.36" size="1.778" layer="95"/>
+<wire x1="83.82" y1="86.36" x2="83.82" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="GND2" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -3421,8 +3423,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </segment>
 <segment>
 <pinref part="I2C" gate="G$1" pin="1"/>
-<wire x1="43.18" y1="40.64" x2="50.8" y2="40.64" width="0.1524" layer="91"/>
-<label x="45.72" y="40.64" size="1.778" layer="95"/>
+<wire x1="68.58" y1="35.56" x2="76.2" y2="35.56" width="0.1524" layer="91"/>
+<label x="71.12" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
@@ -3440,10 +3442,10 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </segment>
 <segment>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
-<wire x1="60.96" y1="152.4" x2="60.96" y2="134.62" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="147.32" x2="83.82" y2="129.54" width="0.1524" layer="91"/>
 <pinref part="ARDUINO1" gate="G$1" pin="9"/>
-<label x="45.72" y="134.62" size="1.778" layer="95"/>
-<wire x1="60.96" y1="134.62" x2="43.18" y2="134.62" width="0.1524" layer="91"/>
+<label x="71.12" y="129.54" size="1.778" layer="95"/>
+<wire x1="83.82" y1="129.54" x2="68.58" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
@@ -3550,36 +3552,36 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <net name="AD3" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="8"/>
-<wire x1="50.8" y1="132.08" x2="43.18" y2="132.08" width="0.1524" layer="91"/>
-<label x="45.72" y="132.08" size="1.778" layer="95"/>
+<wire x1="76.2" y1="127" x2="68.58" y2="127" width="0.1524" layer="91"/>
+<label x="71.12" y="127" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AD2" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="7"/>
-<wire x1="50.8" y1="129.54" x2="43.18" y2="129.54" width="0.1524" layer="91"/>
-<label x="45.72" y="129.54" size="1.778" layer="95"/>
+<wire x1="76.2" y1="124.46" x2="68.58" y2="124.46" width="0.1524" layer="91"/>
+<label x="71.12" y="124.46" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AD1" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="6"/>
-<wire x1="50.8" y1="127" x2="43.18" y2="127" width="0.1524" layer="91"/>
-<label x="45.72" y="127" size="1.778" layer="95"/>
+<wire x1="76.2" y1="121.92" x2="68.58" y2="121.92" width="0.1524" layer="91"/>
+<label x="71.12" y="121.92" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AD0" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="5"/>
-<wire x1="50.8" y1="124.46" x2="43.18" y2="124.46" width="0.1524" layer="91"/>
-<label x="45.72" y="124.46" size="1.778" layer="95"/>
+<wire x1="76.2" y1="119.38" x2="68.58" y2="119.38" width="0.1524" layer="91"/>
+<label x="71.12" y="119.38" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SCK" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="4"/>
-<wire x1="50.8" y1="121.92" x2="43.18" y2="121.92" width="0.1524" layer="91"/>
-<label x="45.72" y="121.92" size="1.778" layer="95"/>
+<wire x1="76.2" y1="116.84" x2="68.58" y2="116.84" width="0.1524" layer="91"/>
+<label x="71.12" y="116.84" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="NRF24L01+" gate="G$1" pin="5"/>
@@ -3590,8 +3592,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <net name="MISO" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="3"/>
-<wire x1="50.8" y1="119.38" x2="43.18" y2="119.38" width="0.1524" layer="91"/>
-<label x="45.72" y="119.38" size="1.778" layer="95"/>
+<wire x1="76.2" y1="114.3" x2="68.58" y2="114.3" width="0.1524" layer="91"/>
+<label x="71.12" y="114.3" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="NRF24L01+" gate="G$1" pin="7"/>
@@ -3602,8 +3604,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <net name="MOSI" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="2"/>
-<wire x1="50.8" y1="116.84" x2="43.18" y2="116.84" width="0.1524" layer="91"/>
-<label x="45.72" y="116.84" size="1.778" layer="95"/>
+<wire x1="76.2" y1="111.76" x2="68.58" y2="111.76" width="0.1524" layer="91"/>
+<label x="71.12" y="111.76" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="NRF24L01+" gate="G$1" pin="6"/>
@@ -3614,57 +3616,57 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <net name="D10" class="0">
 <segment>
 <pinref part="ARDUINO1" gate="G$1" pin="1"/>
-<wire x1="50.8" y1="114.3" x2="43.18" y2="114.3" width="0.1524" layer="91"/>
-<label x="45.72" y="114.3" size="1.778" layer="95"/>
+<wire x1="76.2" y1="109.22" x2="68.58" y2="109.22" width="0.1524" layer="91"/>
+<label x="71.12" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TX" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="12"/>
-<wire x1="50.8" y1="99.06" x2="43.18" y2="99.06" width="0.1524" layer="91"/>
-<label x="45.72" y="99.06" size="1.778" layer="95"/>
+<wire x1="76.2" y1="93.98" x2="68.58" y2="93.98" width="0.1524" layer="91"/>
+<label x="71.12" y="93.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RX" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="11"/>
-<wire x1="50.8" y1="96.52" x2="43.18" y2="96.52" width="0.1524" layer="91"/>
-<label x="45.72" y="96.52" size="1.778" layer="95"/>
+<wire x1="76.2" y1="91.44" x2="68.58" y2="91.44" width="0.1524" layer="91"/>
+<label x="71.12" y="91.44" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D2" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="8"/>
-<wire x1="50.8" y1="88.9" x2="43.18" y2="88.9" width="0.1524" layer="91"/>
-<label x="45.72" y="88.9" size="1.778" layer="95"/>
+<wire x1="76.2" y1="83.82" x2="68.58" y2="83.82" width="0.1524" layer="91"/>
+<label x="71.12" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D3" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="7"/>
-<wire x1="50.8" y1="86.36" x2="43.18" y2="86.36" width="0.1524" layer="91"/>
-<label x="45.72" y="86.36" size="1.778" layer="95"/>
+<wire x1="76.2" y1="81.28" x2="68.58" y2="81.28" width="0.1524" layer="91"/>
+<label x="71.12" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D4" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="6"/>
-<wire x1="50.8" y1="83.82" x2="43.18" y2="83.82" width="0.1524" layer="91"/>
-<label x="45.72" y="83.82" size="1.778" layer="95"/>
+<wire x1="76.2" y1="78.74" x2="68.58" y2="78.74" width="0.1524" layer="91"/>
+<label x="71.12" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D5" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="5"/>
-<wire x1="50.8" y1="81.28" x2="43.18" y2="81.28" width="0.1524" layer="91"/>
-<label x="45.72" y="81.28" size="1.778" layer="95"/>
+<wire x1="76.2" y1="76.2" x2="68.58" y2="76.2" width="0.1524" layer="91"/>
+<label x="71.12" y="76.2" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D6" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="4"/>
-<wire x1="50.8" y1="78.74" x2="43.18" y2="78.74" width="0.1524" layer="91"/>
-<label x="45.72" y="78.74" size="1.778" layer="95"/>
+<wire x1="76.2" y1="73.66" x2="68.58" y2="73.66" width="0.1524" layer="91"/>
+<label x="71.12" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CSN" class="0">
@@ -3675,8 +3677,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </segment>
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="2"/>
-<wire x1="50.8" y1="73.66" x2="43.18" y2="73.66" width="0.1524" layer="91"/>
-<label x="45.72" y="73.66" size="1.778" layer="95"/>
+<wire x1="76.2" y1="68.58" x2="68.58" y2="68.58" width="0.1524" layer="91"/>
+<label x="71.12" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CE" class="0">
@@ -3687,15 +3689,15 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 </segment>
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="3"/>
-<wire x1="50.8" y1="76.2" x2="43.18" y2="76.2" width="0.1524" layer="91"/>
-<label x="45.72" y="76.2" size="1.778" layer="95"/>
+<wire x1="76.2" y1="71.12" x2="68.58" y2="71.12" width="0.1524" layer="91"/>
+<label x="71.12" y="71.12" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D9" class="0">
 <segment>
 <pinref part="ARDUINO2" gate="G$1" pin="1"/>
-<wire x1="50.8" y1="71.12" x2="43.18" y2="71.12" width="0.1524" layer="91"/>
-<label x="45.72" y="71.12" size="1.778" layer="95"/>
+<wire x1="76.2" y1="66.04" x2="68.58" y2="66.04" width="0.1524" layer="91"/>
+<label x="71.12" y="66.04" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="IRQ" class="0">
