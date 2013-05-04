@@ -9102,8 +9102,8 @@ Source: AVX .. aphvc.pdf</description>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" deviceset="VCC" device=""/>
-<part name="R3" library="rcl" deviceset="R-US_" device="0207/2V" value="4.7k"/>
-<part name="R4" library="rcl" deviceset="R-US_" device="0207/2V" value="4.7k"/>
+<part name="R3" library="rcl" deviceset="R-US_" device="0207/2V" value="5.1k"/>
+<part name="R4" library="rcl" deviceset="R-US_" device="0207/2V" value="5.1k"/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
