@@ -3,7 +3,7 @@
 #include <laputa.h>
 
 #define LA_CONF_PROBE_TIMEOUT   (5 * 60) /* secs */
-#define LA_CONF_PROBE_CYCLE      1       /* secs */
+#define LA_CONF_PROBE_CYCLE     30      /* secs */
 
 
 RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
@@ -33,7 +33,7 @@ void loop() {
 			const LaDATAGRAM& body = LaProto::datagram().body;
 
 			float data[LA_CONF_DATA_COUNT];
-			memcpy((char*)&data, body.cont, body.len);
+			memcpy((char*)&data, body.cont, LA_CONF_DATA_COUNT * sizeof(float));
 
 			printf("%s,%f,%f,%f", 
 				la_addr_to_conf(body.sender), 
