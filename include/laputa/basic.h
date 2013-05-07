@@ -51,8 +51,8 @@ const char* la_addr_to_conf(uint64_t addr) {
 //
 // nRF24L01
 //
-#define LA_CONF_PIN_CE  		8
-#define LA_CONF_PIN_CSN 		7
+#define LA_CONF_PIN_CE  		7
+#define LA_CONF_PIN_CSN 		8
 #define LA_CONF_CHANNEL 		10
 #define LA_CONF_PAYLOAD 		32
 
