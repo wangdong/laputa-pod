@@ -11,7 +11,7 @@
 
 PCF8563 rtc;
 AM2321  ac;
-RF24 	radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
+RF24    radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
 
 volatile 
 bool interrupt = false;
@@ -19,66 +19,65 @@ bool interrupt = false;
 
 void setup(void)
 {
-	Serial.begin(LA_CONF_BAUD);
+    Serial.begin(LA_CONF_BAUD);
+    Wire.begin();
 
-	//
-	// RTC
-	//
-	attachInterrupt(0, interrupt_timeup, FALLING);
-	rtc.initClock();
-	rtc.setTimer(TIMER_1HZ, 5);
+    //
+    // RTC
+    //
+    attachInterrupt(0, interrupt_timeup, FALLING);
+    rtc.initClock();
 
-	//
-	// Radio
-	//
-	radio.begin();
-	radio.setDataRate(RF24_2MBPS);
-	radio.setPALevel(RF24_PA_MAX);
-	radio.setPayloadSize(LA_CONF_PAYLOAD);
-	radio.setChannel(LA_CONF_CHANNEL);
-	radio.openWritingPipe(la_conf_to_addr(LA_CONF_ADDR_LAPUTA));
+    //
+    // Radio
+    //
+    radio.begin();
+    radio.setDataRate(RF24_2MBPS);
+    radio.setPALevel(RF24_PA_MAX);
+    radio.setPayloadSize(LA_CONF_PAYLOAD);
+    radio.setChannel(LA_CONF_CHANNEL);
+    radio.openWritingPipe(la_conf_to_addr(LA_CONF_ADDR_LAPUTA));
 
-	radio.startListening();
+    radio.startListening();
 
-	//
-	// Debug dump
-	// 
-	printf_begin();
-	radio.printDetails();
-	delay(200);
+    //
+    // Debug dump
+    //
+    printf_begin();
+    radio.printDetails();
+    delay(200);
 }
 
 void interrupt_timeup() {
-    rtc.setTimer(TIMER_1HZ, 5);
-	interrupt = !interrupt;
 }
 
 
 void loop(void) {
-    // LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
-    //  if ( (tick++ % (LA_CONF_PROBE_DELAY/8)) == 0 )
-	// probeAndSend();
-	delay(1000);
-	// Serial.println(rtc.formatTime());
-	// Serial.println("===============");
-	Serial.print(interrupt);
+    rtc.setTimer(TIMER_EVERY_MINUTE, 3);
+    probeAndSend();
+    LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
 }
 
 
 void probeAndSend() {
-	ac.read();
+    ac.read();
+    if (ac.available()) {
+        float data[LA_CONF_DATA_COUNT];
+        data[LA_CONF_DATA_TEMP] = ac.temperature/10.0;
+        data[LA_CONF_DATA_HUM]  = ac.humidity/10.0;
+        data[LA_CONF_DATA_DEW]  = weather::dewPoint(ac.temperature/10.0, ac.humidity/10.0);
 
- 	float data[LA_CONF_DATA_COUNT];
- 	data[LA_CONF_DATA_TEMP] = ac.temperature/10.0;
- 	data[LA_CONF_DATA_HUM]  = ac.humidity/10.0;
- 	data[LA_CONF_DATA_DEW]  = weather::dewPoint(ac.temperature, ac.humidity)/10.0;
+        Serial.println(data[LA_CONF_DATA_TEMP]);
+        Serial.println(data[LA_CONF_DATA_HUM]);
+        Serial.println(data[LA_CONF_DATA_DEW]);
 
- 	radio.powerUp();
- 	LaProto::datagram()
- 		.withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
- 		.sendFrom(LA_CONF_ADDR_POD2)
- 	.write(radio);
- 	radio.powerDown();
+        radio.powerUp();
+        LaProto::datagram()
+            .withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
+            .sendFrom(LA_CONF_ADDR_POD2)
+        .write(radio);
+        radio.powerDown();
+    }
 }
 
 
