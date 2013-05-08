@@ -54,8 +54,10 @@ void setup(void)
 
 void loop(void) {
     rtc.setTimer(LA_CONF_REPORT_CYCLE);
+    radio.powerDown();
     LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
     rtc.clearTimer();
+    radio.powerUp();
     report();
 }
 
@@ -71,12 +73,10 @@ void report() {
         // Serial.println(data[LA_CONF_DATA_HUM]);
         // Serial.println(data[LA_CONF_DATA_DEW]);
 
-        radio.powerUp();
         LaProto::datagram()
             .withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
             .sendFrom(LA_CONF_SELF_ADDR)
         .send(radio);
-        radio.powerDown();
     }
 }
 
