@@ -1,20 +1,27 @@
+#include <LowPower.h>
+
 #include <SPI.h>
-#include <nRF24L01.h>
 #include <RF24.h>
+
 #include <Wire.h>
 #include <Rtc_Pcf8563.h>
 #include <AM2321.h>
-#include <weather.h>
-#include <LowPower.h>
+#include <Weather.h>
+
 #include <laputa.h>
 
 
+//
+// 外围器件
+//
 PCF8563 rtc;
 AM2321  ac;
 RF24    radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
 
-volatile 
-bool interrupt = false;
+//
+// 本传感器的地址
+//
+#define LA_CONF_SELF_ADDR LA_CONF_ADDR_POD2
 
 
 void setup(void)
@@ -23,7 +30,7 @@ void setup(void)
     Wire.begin();
 
     //
-    // RTC
+    // RTC & Interruption
     //
     attachInterrupt(0, interrupt_timeup, FALLING);
     rtc.initClock();
@@ -48,36 +55,36 @@ void setup(void)
     delay(200);
 }
 
-void interrupt_timeup() {
-}
 
 
 void loop(void) {
-    rtc.setTimer(TIMER_EVERY_MINUTE, 3);
-    probeAndSend();
+    rtc.setTimer(LA_CONF_REPORT_CYCLE);
+    report();
     LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
 }
 
 
-void probeAndSend() {
+void report() {
     ac.read();
     if (ac.available()) {
         float data[LA_CONF_DATA_COUNT];
-        data[LA_CONF_DATA_TEMP] = ac.temperature/10.0;
-        data[LA_CONF_DATA_HUM]  = ac.humidity/10.0;
-        data[LA_CONF_DATA_DEW]  = weather::dewPoint(ac.temperature/10.0, ac.humidity/10.0);
+        data[LA_CONF_DATA_HUM] = ac.humidity/10.0;
+        data[LA_CONF_DATA_DEW] = weather::dewPoint(data[LA_CONF_DATA_TEMP], data[LA_CONF_DATA_HUM]);
 
-        Serial.println(data[LA_CONF_DATA_TEMP]);
-        Serial.println(data[LA_CONF_DATA_HUM]);
-        Serial.println(data[LA_CONF_DATA_DEW]);
+        // Serial.println(data[LA_CONF_DATA_TEMP]);
+        // Serial.println(data[LA_CONF_DATA_HUM]);
+        // Serial.println(data[LA_CONF_DATA_DEW]);
 
         radio.powerUp();
         LaProto::datagram()
             .withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
-            .sendFrom(LA_CONF_ADDR_POD2)
-        .write(radio);
+            .sendFrom(LA_CONF_SELF_ADDR)
+        .send(radio);
         radio.powerDown();
     }
+}
+
+void interrupt_timeup() {
 }
 
 
@@ -119,3 +126,6 @@ void printf_begin(void)
 
 #endif // __PRINTF_H__
 
+//
+// END OF FILE
+//

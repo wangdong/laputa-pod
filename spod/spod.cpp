@@ -2,8 +2,8 @@
 #include <librf24-bcm/RF24.h>
 #include <laputa.h>
 
-#define LA_CONF_PROBE_TIMEOUT   (5 * 60) /* secs */
-#define LA_CONF_PROBE_CYCLE     1      /* secs */
+#define LA_CONF_SCAN_TIMEOUT   (5 * 60) /* secs */
+#define LA_CONF_SCAN_CYCLE     30      /* secs */
 
 
 RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
@@ -24,11 +24,11 @@ void setup() {
 inline 
 void loop() {
 	int time = 0;
-	while (time < LA_CONF_PROBE_TIMEOUT) {
+	while (time < LA_CONF_SCAN_TIMEOUT) {
 
 		if (radio.available()) {
 
-			LaProto::datagram().read(radio);
+			LaProto::datagram().receive(radio);
 
 			const LaDATAGRAM& body = LaProto::datagram().body;
 
@@ -44,8 +44,8 @@ void loop() {
 			break;
 		}
 		
-		time += LA_CONF_PROBE_CYCLE;
-		sleep(LA_CONF_PROBE_CYCLE);
+		time += LA_CONF_SCAN_CYCLE;
+		sleep(LA_CONF_SCAN_CYCLE);
 		fputc('.', stderr);
 	}
 }
