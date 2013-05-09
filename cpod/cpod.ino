@@ -12,22 +12,20 @@
 
 
 //
+// 本传感器的地址
+//
+#define LA_CONF_SELF_ADDR LA_CONF_ADDR_POD2
+
+//
 // 外围器件
 //
 PCF8563 rtc;
 AM2321  ac;
 RF24    radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
 
-//
-// 本传感器的地址
-//
-#define LA_CONF_SELF_ADDR LA_CONF_ADDR_POD2
-
-
 void setup(void)
 {
     Serial.begin(LA_CONF_BAUD);
-    Wire.begin();
 
     //
     // RTC & Interruption
@@ -52,35 +50,33 @@ void setup(void)
     //
     printf_begin();
     radio.printDetails();
-    delay(200);
 }
-
-
 
 void loop(void) {
     rtc.setTimer(LA_CONF_REPORT_CYCLE);
-    report();
+    radio.powerDown();
     LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
+    rtc.clearTimer();
+    radio.powerUp();
+    report();
 }
-
 
 void report() {
     ac.read();
     if (ac.available()) {
         float data[LA_CONF_DATA_COUNT];
         data[LA_CONF_DATA_HUM] = ac.humidity/10.0;
+        data[LA_CONF_DATA_TEMP] = ac.temperature/10.0;
         data[LA_CONF_DATA_DEW] = weather::dewPoint(data[LA_CONF_DATA_TEMP], data[LA_CONF_DATA_HUM]);
 
         // Serial.println(data[LA_CONF_DATA_TEMP]);
         // Serial.println(data[LA_CONF_DATA_HUM]);
         // Serial.println(data[LA_CONF_DATA_DEW]);
 
-        radio.powerUp();
         LaProto::datagram()
             .withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
             .sendFrom(LA_CONF_SELF_ADDR)
         .send(radio);
-        radio.powerDown();
     }
 }
 
