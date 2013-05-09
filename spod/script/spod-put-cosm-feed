@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+
+%x{killall spod}
+
 data = %x{spod}.split(',')
 
 if not data.empty? then
