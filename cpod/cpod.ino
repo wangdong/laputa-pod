@@ -76,8 +76,8 @@ void report() {
         radio.powerUp();
         LaProto::datagram()
             .withContent((const uint8_t*)data, LA_CONF_DATA_SIZE)
-            .sendFrom(LA_CONF_SELF_ADDR);
-        .send(radio);
+            .sendFrom(LA_CONF_SELF_ADDR)
+            .send(radio);
         radio.powerDown();
     }
 }
