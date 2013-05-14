@@ -3,7 +3,7 @@
 #include <laputa.h>
 
 #define LA_CONF_SCAN_TIMEOUT   (5 * 60) /* secs */
-#define LA_CONF_SCAN_CYCLE     30      /* secs */
+#define LA_CONF_SCAN_CYCLE      2       /* secs */
 
 
 RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
