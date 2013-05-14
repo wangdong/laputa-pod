@@ -14,7 +14,7 @@ feedsmap = {
 # 
 %x{killall spod}
 
-data = %x{spod"}.split(',')
+data = %x{spod}.split(',')
 
 #
 # Activate
