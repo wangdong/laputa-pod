@@ -1,9 +1,13 @@
 #include <unistd.h>
 #include <librf24-bcm/RF24.h>
 #include <laputa.h>
+#include <libxively/xively.h>
+#include <libxively/xi_helpers.h>
+#include <libxively/xi_err.h>
+
 
 #define LA_CONF_SCAN_TIMEOUT   (5 * 60) /* secs */
-#define LA_CONF_SCAN_CYCLE      2       /* secs */
+#define LA_CONF_SCAN_CYCLE      1       /* secs */
 
 
 RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
