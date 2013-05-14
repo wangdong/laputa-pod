@@ -10,18 +10,18 @@ feedsmap = {
 }
 
 #
-# Activate
-#
-cmd = "curl --request GET http://api.xively.com/v2/devices/#{feedsmap[data[0]][:activation]}/activate"
-$stderr.puts cmd
-$stderr.puts %x{#{cmd}}
-
-#
 # Probe
 # 
 %x{killall spod}
 
 data = %x{spod"}.split(',')
+
+#
+# Activate
+#
+cmd = "curl --request GET http://api.xively.com/v2/devices/#{feedsmap[data[0]][:activation]}/activate"
+$stderr.puts cmd
+$stderr.puts %x{#{cmd}}
 
 #
 # Report
