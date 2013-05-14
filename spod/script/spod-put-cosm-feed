@@ -13,23 +13,21 @@ feedsmap = {
 # Probe
 # 
 %x{killall spod}
-
 data = %x{spod}.split(',')
 
-#
-# Activate
-#
-cmd = "curl --request GET http://api.xively.com/v2/devices/#{feedsmap[data[0]][:activation]}/activate"
-$stderr.puts cmd
-$stderr.puts %x{#{cmd}}
-
-#
-# Report
-#
 if not data.empty? then
 	$stderr.puts data
 
+	#
+	# Activate
+	#
+	cmd = "curl --request GET http://api.xively.com/v2/devices/#{feedsmap[data[0]][:activation]}/activate"
+	$stderr.puts cmd
+	$stderr.puts %x{#{cmd}}
 
+	#
+	# Report
+	#
 	json = <<-EOF
 	{
 	  "version":"1.0.0",
