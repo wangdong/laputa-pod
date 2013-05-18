@@ -12,7 +12,7 @@ RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
 inline 
 void setup() {
 	radio.begin();
-	radio.setDataRate(RF24_2MBPS);
+	radio.setDataRate(RF24_250KBPS);
 	radio.setPALevel(RF24_PA_MAX);
 	radio.setPayloadSize(LA_CONF_PAYLOAD);
 	radio.setChannel(LA_CONF_CHANNEL);

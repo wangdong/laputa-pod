@@ -37,7 +37,7 @@ void setup(void)
     // Radio
     //
     radio.begin();
-    radio.setDataRate(RF24_2MBPS);
+    radio.setDataRate(RF24_250KBPS);
     radio.setPALevel(RF24_PA_MAX);
     radio.setPayloadSize(LA_CONF_PAYLOAD);
     radio.setChannel(LA_CONF_CHANNEL);
