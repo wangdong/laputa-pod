@@ -3,12 +3,6 @@
 
 
 //
-// Queue
-//
-#define LA_CONF_QUEUE_NAME "QS00"
-
-
-//
 // Network
 //
 #define LA_CONF_ADDR_LEN    sizeof(uint64_t)
@@ -36,6 +30,11 @@ const char* la_addr_to_conf(uint64_t addr) {
     conf[LA_CONF_ADDR_LEN] = 0;
     return conf;
 }
+
+//
+// Queue
+//
+#define LA_CONF_QUEUE_NAME LA_CONF_ADDR_LAPUTA
 
 //
 // AC Data Pack

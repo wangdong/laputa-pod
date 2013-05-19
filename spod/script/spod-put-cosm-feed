@@ -5,7 +5,7 @@ require "json"
 #
 # Config
 #
-LA_CONFIG_QUEUE_NAME = "QS00"
+LA_CONFIG_QUEUE_NAME = "QS00N000"
 
 LA_CONF_FEEDMAP = {
 	'QC00N000' => {:feed=>1833218449, :key=>'6hPaxYTsoqGA6P9gP3l_mzrpyhCSAKxPeFRlSkpoOW9nND0g', :activation=>'18d3d16130f5a1e85049ed3ada4972a67c1a3c9a'},

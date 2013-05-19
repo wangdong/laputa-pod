@@ -104,12 +104,14 @@ void loop() {
 
 			float data[LA_CONF_DATA_COUNT];
 			memcpy((char*)&data, body.cont, LA_CONF_DATA_COUNT * sizeof(float));
-
-			printf("%s,%f,%f,%f", 
+			
+			char buf[256] = {0};
+			sprintf(buf, "%s,%f,%f,%f", 
 				la_addr_to_conf(body.sender), 
 				data[LA_CONF_DATA_TEMP], 
 				data[LA_CONF_DATA_HUM], 
 				data[LA_CONF_DATA_DEW]);
+			syslog(LOG_INFO, buf);
 
 			mq.send(LA_CONF_QUEUE_NAME, 
 				la_addr_to_conf(body.sender), 
