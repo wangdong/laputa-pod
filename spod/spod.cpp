@@ -9,7 +9,6 @@
 #include <laputa.h>
 #include <hiredis.h>
 
-#define LA_CONF_SCAN_TIMEOUT   (5 * 60) /* secs */
 #define LA_CONF_SCAN_CYCLE      1       /* secs */
 
 
@@ -93,11 +92,8 @@ void setup() {
 
 inline 
 void loop() {
-	int time = 0;
-	while (time < LA_CONF_SCAN_TIMEOUT) {
-
+	while (true) {
 		if (radio.available()) {
-
 			LaProto::datagram().receive(radio);
 
 			const LaDATAGRAM& body = LaProto::datagram().body;
@@ -119,8 +115,6 @@ void loop() {
 				data[LA_CONF_DATA_HUM], 
 				data[LA_CONF_DATA_DEW]);
 		}
-		
-		time += LA_CONF_SCAN_CYCLE;
 		sleep(LA_CONF_SCAN_CYCLE);
 		fputc('.', stderr);
 	}

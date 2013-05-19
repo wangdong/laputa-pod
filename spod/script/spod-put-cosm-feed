@@ -8,68 +8,68 @@ require "json"
 LA_CONFIG_QUEUE_NAME = "QS00N000"
 
 LA_CONF_FEEDMAP = {
-	'QC00N000' => {:feed=>1833218449, :key=>'6hPaxYTsoqGA6P9gP3l_mzrpyhCSAKxPeFRlSkpoOW9nND0g', :activation=>'18d3d16130f5a1e85049ed3ada4972a67c1a3c9a'},
-	'QC00N001' => {:feed=>1414508960, :key=>'UYqo31CjIWhJi_pItNpcP0X5Mh2SAKwrR3A5MVY4cHZKQT0g', :activation=>'755fae26cae74d6dd643cab5d31a3b62e42c347f'},
+    'QC00N000' => {:feed=>1833218449, :key=>'6hPaxYTsoqGA6P9gP3l_mzrpyhCSAKxPeFRlSkpoOW9nND0g', :activation=>'18d3d16130f5a1e85049ed3ada4972a67c1a3c9a'},
+    'QC00N001' => {:feed=>1414508960, :key=>'UYqo31CjIWhJi_pItNpcP0X5Mh2SAKwrR3A5MVY4cHZKQT0g', :activation=>'755fae26cae74d6dd643cab5d31a3b62e42c347f'},
     'QC00N002' => {:feed=>1798760718, :key=>'ift2Ri4_rmHmOEMSiTpF3Jzr9TmSAKxtc3lSNmRSMmFYUT0g', :activation=>'251a65806a4da104dc856591ec2e58e4fa3092b2'},
 }
 
 module Datagram
-	def self.to_json time, temperature, humidity, dewpoint
-		time = Time.at(time.to_i).utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-		data = {}
-		data["version"] = "1.0.0"
-		data["datastreams"] = []
-		data["datastreams"] << make_datapoint(time, "temperature", temperature.to_f)
-		data["datastreams"] << make_datapoint(time, "humidity",    humidity.to_f)
-		data["datastreams"] << make_datapoint(time, "dewpoint",    dewpoint.to_f)
-		data.to_json
-	end
+    def self.to_json time, temperature, humidity, dewpoint
+        time = Time.at(time.to_i).utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+        data = {}
+        data["version"] = "1.0.0"
+        data["datastreams"] = []
+        data["datastreams"] << make_datapoint(time, "temperature", temperature.to_f)
+        data["datastreams"] << make_datapoint(time, "humidity",    humidity.to_f)
+        data["datastreams"] << make_datapoint(time, "dewpoint",    dewpoint.to_f)
+        data.to_json
+    end
 
-	def self.make_datapoint time, name, value
-		{
-			"id" => name,
-			"datapoints" => 
-			[
-				{
-					"at"    => time, 
-				 	"value" => sprintf("%.2f", value)
-				}
-			]
-		}
-	end
+    def self.make_datapoint time, name, value
+        {
+            "id" => name,
+            "datapoints" => 
+            [
+                {
+                    "at"    => time, 
+                    "value" => sprintf("%.2f", value)
+                }
+            ]
+        }
+    end
 end
 
 
 def report(time, data)
-	if not data.empty? then
-		$stderr.puts time, data
+    if not data.empty? then
+        $stderr.puts "time:#{time.to_s} data:#{data.to_s}"
 
-		#
-		# Activate
-		#
-		cmd = "curl --request GET http://api.xively.com/v2/devices/#{LA_CONF_FEEDMAP[data[0]][:activation]}/activate"
-		$stderr.puts cmd
-		$stderr.puts %x{#{cmd}}
+        #
+        # Activate
+        #
+        cmd = "curl --request GET http://api.xively.com/v2/devices/#{LA_CONF_FEEDMAP[data[0]][:activation]}/activate"
+        $stderr.puts cmd
+        $stderr.puts %x{#{cmd}}
 
-		#
-		# Report
-		#
-		json = Datagram.to_json(time, data[1], data[2], data[3])
-		cmd = "curl --request PUT --data '#{json}' --header 'X-ApiKey: #{LA_CONF_FEEDMAP[data[0]][:key]}' http://api.xively.com/v2/feeds/#{LA_CONF_FEEDMAP[data[0]][:feed]}"
+        #
+        # Report
+        #
+        json = Datagram.to_json(time, data[1], data[2], data[3])
+        cmd = "curl --request PUT --data '#{json}' --header 'X-ApiKey: #{LA_CONF_FEEDMAP[data[0]][:key]}' http://api.xively.com/v2/feeds/#{LA_CONF_FEEDMAP[data[0]][:feed]}"
 
-		$stderr.puts cmd
-		$stderr.puts %x{#{cmd}}
-	end
+        $stderr.puts cmd
+        $stderr.puts %x{#{cmd}}
+    end
 end
 
 
 if __FILE__ == $0
-	%x{spod -d} if %x{pgrep spod}.empty?
+    %x{spod -d} if %x{pgrep spod}.empty?
 
-	mq = Redis.new
-	while mq
-		break unless data = mq.lpop(LA_CONFIG_QUEUE_NAME)
-		data = data.split(',')
-		report(data[0],	data[1..-1])
-	end
+    mq = Redis.new
+    while mq
+        break unless data = mq.lpop(LA_CONFIG_QUEUE_NAME)
+        data = data.split(',')
+        report(data[0], data[1..-1])
+    end
 end
