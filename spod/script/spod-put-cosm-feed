@@ -15,7 +15,7 @@ LA_CONF_FEEDMAP = {
 
 module Datagram
 	def self.to_json time, temperature, humidity, dewpoint
-		time = Time.at(time.to_i).strftime("%Y-%m-%dT%H:%M:%SZ")
+		time = Time.at(time.to_i).utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 		data = {}
 		data["version"] = "1.0.0"
 		data["datastreams"] = []
