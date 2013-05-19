@@ -1,10 +1,13 @@
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <syslog.h>
+#include <signal.h>
 #include <librf24-bcm/RF24.h>
 #include <laputa.h>
 #include <hiredis.h>
-#include <libxively/xively.h>
-#include <libxively/xi_helpers.h>
-#include <libxively/xi_err.h>
 
 #define LA_CONF_SCAN_TIMEOUT   (5 * 60) /* secs */
 #define LA_CONF_SCAN_CYCLE      1       /* secs */
@@ -35,6 +38,40 @@ private:
 	    return mq != NULL;
 	}
 };
+
+void termsig_handler(int signo) 
+{ 
+	if(signo == SIGTERM) 
+	/* catched signal sent by kill(1) command */ 
+  	{ 
+		syslog(LOG_INFO, "terminated"); 
+		closelog(); 
+		exit(0); 
+  	}
+}
+
+int fork_daemon(void) 
+{
+	pid_t pid; 
+	if((pid = fork()) < 0) 
+  		return -1;
+	else if(pid != 0) 
+  		exit(0); /* parent exit */ 
+
+	openlog("spod", LOG_PID, LOG_USER);
+	syslog(LOG_INFO, "started"); 
+
+	/* child continues */ 
+	setsid(); /* become session leader */ 
+	umask(0); /* clear file mode creation mask */ 
+	close(0);
+	close(1);
+	close(2);
+
+	signal(SIGTERM, termsig_handler);
+
+	return 0;
+}
 
 
 RF24 radio(RPI_V2_GPIO_P1_26, RPI_V2_GPIO_P1_15, BCM2835_SPI_SPEED_8MHZ);
@@ -90,13 +127,16 @@ void loop() {
 
 int main(int argc, char** argv) {
 	setup();
-	if (argc > 1 && strcmp(argv[1], "-d") == 0) {
+	if (argc > 1 && strcmp(argv[1], "-i") == 0) {
 		radio.printDetails();
 		return 0;
+	}
+	if (argc > 1 && strcmp(argv[1], "-d") == 0) {
+		if (fork_daemon() != 0)
+			return 0;
 	}
 
 	loop();
 
 	return 0;
 }
-
