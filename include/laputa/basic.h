@@ -3,6 +3,12 @@
 
 
 //
+// Queue
+//
+#define LA_CONF_QUEUE_NAME "QS00"
+
+
+//
 // Network
 //
 #define LA_CONF_ADDR_LEN    sizeof(uint64_t)
