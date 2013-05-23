@@ -19,30 +19,9 @@
 //
 // 外围器件
 //
-PCF8563 rtc;
-AM2321  ac;
-RF24    radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
-
-//
-// 通用重启器
-//
-class LaResetor {
-    int cycle;
-public:
-    LaResetor(int rhs) {
-        cycle = rhs / (LA_CONF_REPORT_CYCLE_MINS*60);
-    }
-    void wokenup() {
-        if (--cycle <= 0)
-            reset();
-    }
-private:
-    void reset() {
-        wdt_enable(WDTO_15MS);
-        delay(20);
-    }
-};
-
+PCF8563   rtc;
+AM2321    ac;
+RF24      radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
 LaResetor resetor(LA_CONF_RESET_CYCLE);
 
 

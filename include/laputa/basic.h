@@ -61,11 +61,32 @@ const char* la_addr_to_conf(uint64_t addr) {
 //
 #define LA_CONF_REPORT_CYCLE_MINS 2 /*mins*/
 #define LA_CONF_REPORT_CYCLE      TIMER_EVERY_MINUTE, LA_CONF_REPORT_CYCLE_MINS /*mins*/
+
 //
 // 传感器重启周期
 //
 #define LA_CONF_RESET_CYCLE (7 * 24 * 3600) // weekly
 
+
+//
+// 通用重启器
+//
+class LaResetor {
+    int cycle;
+public:
+    LaResetor(int rhs) {
+        cycle = rhs / (LA_CONF_REPORT_CYCLE_MINS*60);
+    }
+    void wokenup() {
+        if (--cycle <= 0)
+            reset();
+    }
+private:
+    void reset() {
+        wdt_enable(WDTO_15MS);
+        delay(20);
+    }
+};
 
 
 #endif
