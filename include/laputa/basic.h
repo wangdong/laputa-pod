@@ -32,6 +32,11 @@ const char* la_addr_to_conf(uint64_t addr) {
 }
 
 //
+// Queue
+//
+#define LA_CONF_QUEUE_NAME LA_CONF_ADDR_LAPUTA
+
+//
 // AC Data Pack
 //
 #define LA_CONF_DATA_COUNT      3 /* 1:temp, 2:hum, 3:dew */
