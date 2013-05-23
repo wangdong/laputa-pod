@@ -1,8 +1,8 @@
-#include <LowPower.h>
+#include <avr/wdt.h>
 
+#include <LowPower.h>
 #include <SPI.h>
 #include <RF24.h>
-
 #include <Wire.h>
 #include <Rtc_Pcf8563.h>
 #include <AM2321.h>
@@ -14,14 +14,16 @@
 //
 // 本传感器的地址
 //
-#define LA_CONF_SELF_ADDR LA_CONF_ADDR_POD2
+#define LA_CONF_SELF_ADDR LA_CONF_ADDR_POD0
 
 //
 // 外围器件
 //
-PCF8563 rtc;
-AM2321  ac;
-RF24    radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
+PCF8563   rtc;
+AM2321    ac;
+RF24      radio(LA_CONF_PIN_CE, LA_CONF_PIN_CSN);
+LaResetor resetor(LA_CONF_RESET_CYCLE);
+
 
 void setup(void)
 {
@@ -56,9 +58,10 @@ void setup(void)
 
 void loop(void) {
     rtc.setTimer(LA_CONF_REPORT_CYCLE);
-    LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_ON);
     rtc.clearTimer();
     report();
+    resetor.wokenup();
 }
 
 void report() {
