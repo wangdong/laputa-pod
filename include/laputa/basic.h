@@ -39,7 +39,6 @@ const char* la_addr_to_conf(uint64_t addr) {
 #define LA_CONF_DATA_TEMP       0
 #define LA_CONF_DATA_HUM        1
 #define LA_CONF_DATA_DEW        2
-#define LA_CONF_REPORT_CYCLE    TIMER_EVERY_MINUTE, 2 /*mins*/
 
 
 //
@@ -55,6 +54,18 @@ const char* la_addr_to_conf(uint64_t addr) {
 // Serial
 //
 #define LA_CONF_BAUD            9600
+
+
+//
+// 传感器采样周期
+//
+#define LA_CONF_REPORT_CYCLE_MINS 2 /*mins*/
+#define LA_CONF_REPORT_CYCLE      TIMER_EVERY_MINUTE, LA_CONF_REPORT_CYCLE_MINS /*mins*/
+//
+// 传感器重启周期
+//
+#define LA_CONF_RESET_CYCLE (7 * 24 * 3600) // weekly
+
 
 
 #endif
