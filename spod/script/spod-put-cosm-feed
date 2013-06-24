@@ -64,7 +64,7 @@ end
 
 
 if __FILE__ == $0
-    %x{spod -d} if %x{pgrep spod}.empty?
+    %x{/usr/local/bin/spod -d} if %x{/usr/bin/pgrep spod}.empty?
 
     mq = Redis.new
     while mq
