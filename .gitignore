@@ -19,3 +19,39 @@ spod
 *.pro
 *.b#*
 *.s#*
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+doc/
+
+.com.apple.timemachine.supported
+
+*.lst
+*.obj
+*.hex
+*.bin
+*.lnp
+*.uvgui*
+*.uvopt*
+*.bak
+*.M51
+*.__*
+*.map
+*.orc
+*.sbr
+
+cpod
+
+.DS_Store
