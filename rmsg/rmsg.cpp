@@ -18,6 +18,8 @@ inline
 void setup() {
 	radio.begin();
 	radio.setDataRate(RF24_2MBPS);
+    radio.enableDynamicPayloads();
+    radio.setAutoAck(true);
 	radio.setChannel(24);
     radio.setRetries(15, 15);
 	radio.openWritingPipe(0x00FEEDF00D00LL);
@@ -30,11 +32,7 @@ void setup() {
 inline 
 void send(std::string msg) {
 	puts(msg.c_str());;	
-    if (radio.write(msg.c_str(), msg.size())) {
-		puts("S");
-    } else {
-		puts("F");
-    }
+    radio.write(msg.c_str(), msg.size());
 }
 
 
