@@ -13,6 +13,7 @@
 
 
 RF24 radio(RPI_V2_GPIO_P1_18, RPI_V2_GPIO_P1_26, BCM2835_SPI_SPEED_8MHZ);
+std::string server_addr = "L1N00";
 
 inline 
 void setup() {
@@ -22,7 +23,7 @@ void setup() {
     radio.setAutoAck(true);
     radio.setChannel(24);
     radio.setRetries(15, 15);
-    radio.openWritingPipe((uint64_t)*"L1N00");
+    radio.openWritingPipe((uint64_t)*server_addr.c_str());
     radio.startListening();
     radio.stopListening();
 }
@@ -45,7 +46,12 @@ int main(int argc, char** argv) {
         radio.printDetails();
         return 0;
     }
-    send(std::string(argv[1]));
+    if (argc > 1 && strcmp(argv[1], "-s") == 0) {
+		server_addr = argv[2];
+	    send(std::string(argv[3]));
+    }
+    else
+	    send(std::string(argv[1]));
 
     return 0;
 }
