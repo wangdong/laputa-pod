@@ -34,7 +34,6 @@ void send(std::string msg) {
     	puts("sent");
     else
     	puts("failed");
-    radio.powerDown();
 }
 
 int main(int argc, char** argv) {
