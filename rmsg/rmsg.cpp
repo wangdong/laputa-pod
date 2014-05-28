@@ -16,36 +16,36 @@ RF24 radio(RPI_V2_GPIO_P1_18, RPI_V2_GPIO_P1_26, BCM2835_SPI_SPEED_8MHZ);
 
 inline 
 void setup() {
-	radio.begin();
-	radio.setDataRate(RF24_2MBPS);
+    radio.begin();
+    radio.setDataRate(RF24_2MBPS);
     radio.enableDynamicPayloads();
     radio.setAutoAck(true);
-	radio.setChannel(24);
+    radio.setChannel(24);
     radio.setRetries(15, 15);
-	radio.openWritingPipe(0x00FEEDF00D00LL);
-	radio.startListening();
+    radio.openWritingPipe((uint64_t)*"L1N00");
+    radio.startListening();
     radio.stopListening();
 }
 
-
-
 inline 
 void send(std::string msg) {
-	puts(msg.c_str());;	
-    radio.write(msg.c_str(), msg.size());
+    if (radio.write(msg.c_str(), msg.size()))
+    	puts("sent");
+    else
+    	puts("failed");
+    radio.powerDown();
 }
 
-
 int main(int argc, char** argv) {
-	if (argc == 1)
-		return 0;
-		
-	setup();
-	if (argc > 1 && strcmp(argv[1], "-i") == 0) {
-		radio.printDetails();
-		return 0;
-	}
-	send(std::string(argv[1]));
+    if (argc == 1)
+        return 0;
+        
+    setup();
+    if (argc > 1 && strcmp(argv[1], "-i") == 0) {
+        radio.printDetails();
+        return 0;
+    }
+    send(std::string(argv[1]));
 
-	return 0;
+    return 0;
 }
