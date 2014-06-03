@@ -28,24 +28,31 @@ const nRF24Config radioArray[nRF24MAX] = {
 	{RPI_V2_GPIO_P1_18, RPI_V2_GPIO_P1_26},
 };
 
-RF24 radio(radioArray[nRF24D00].CSN, radioArray[nRF24D00].CE, BCM2835_SPI_SPEED_8MHZ);
+RF24 radio(
+    radioArray[nRF24D01].CSN, 
+    radioArray[nRF24D01].CE, 
+    BCM2835_SPI_SPEED_8MHZ
+    );
 
 inline 
 void setup() {
     radio.begin();
     radio.setDataRate(RF24_2MBPS);
-    radio.enableDynamicPayloads();
     radio.setChannel(24);
-    radio.setRetries(15, 15);
-    radio.openWritingPipe(0x00feedf00d00ull);
+    radio.enableDynamicPayloads();
+    radio.setRetries(8, 5);
+    radio.openWritingPipe(0x00feedf00d12ull);
+    radio.startListening();
 }
 
 inline 
 void send(std::string msg) {
+    radio.stopListening();
     if (radio.write(msg.c_str(), msg.size()))
     	puts("sent");
     else
     	puts("failed");
+    radio.startListening();
 }
 
 int main(int argc, char** argv) {
