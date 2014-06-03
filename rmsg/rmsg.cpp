@@ -11,21 +11,33 @@
 #include <string>
 #include <iostream>
 
+struct nRF24Config
+{
+	uint32_t CSN;
+	uint32_t CE;	
+};
 
-RF24 radio(RPI_V2_GPIO_P1_18, RPI_V2_GPIO_P1_26, BCM2835_SPI_SPEED_8MHZ);
-std::string server_addr = "L1N00";
+enum RADIO {
+	nRF24D00,
+	nRF24D01,
+	nRF24MAX,
+};
+
+const nRF24Config radioArray[nRF24MAX] = { 
+	{RPI_V2_GPIO_P1_16, RPI_V2_GPIO_P1_24}, 
+	{RPI_V2_GPIO_P1_18, RPI_V2_GPIO_P1_26},
+};
+
+RF24 radio(radioArray[nRF24D00].CSN, radioArray[nRF24D00].CE, BCM2835_SPI_SPEED_8MHZ);
 
 inline 
 void setup() {
     radio.begin();
     radio.setDataRate(RF24_2MBPS);
     radio.enableDynamicPayloads();
-    radio.setAutoAck(true);
     radio.setChannel(24);
     radio.setRetries(15, 15);
-    radio.openWritingPipe((uint64_t)*server_addr.c_str());
-    radio.startListening();
-    radio.stopListening();
+    radio.openWritingPipe(0x00feedf00d00ull);
 }
 
 inline 
@@ -41,14 +53,8 @@ int main(int argc, char** argv) {
         return 0;
         
     setup();
-    if (argc > 1 && strcmp(argv[1], "-i") == 0) {
+    if (argc > 1 && strcmp(argv[1], "-i") == 0)
         radio.printDetails();
-        return 0;
-    }
-    if (argc > 1 && strcmp(argv[1], "-s") == 0) {
-		server_addr = argv[2];
-	    send(std::string(argv[3]));
-    }
     else
 	    send(std::string(argv[1]));
 
